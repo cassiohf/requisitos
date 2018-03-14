@@ -1,6 +1,8 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 
@@ -14,11 +16,13 @@ public class CardTrello {
 	private boolean cardDataFinalizada;
 	private DateTime dataUltimaAtividade;
 	private String descricao;
+	private Map<String, String> descricoes;
 	
 	private ArrayList<AcaoCard> listaAcoes;
 	
 	public CardTrello() {
 		listaAcoes = new ArrayList<AcaoCard>();
+		descricoes = new HashMap<String, String>();
 	}
 	
 	public String getId() {
@@ -89,8 +93,7 @@ public class CardTrello {
 	public String toString() {
 		return "CardTrello [id=" + id + ", idList=" + idList + ", name=" + name + ", shortLink=" + shortLink
 				+ ", dataEntrega=" + dataEntrega + ", cardDataFinalizada=" + cardDataFinalizada
-				+ ", dataUltimaAtividade=" + dataUltimaAtividade + ", descricao=" + descricao + ", listaAcoes="
-				+ listaAcoes + "]";
+				+ ", dataUltimaAtividade=" + dataUltimaAtividade + ", descricoes =" + descricoes + "]";
 	}
 
 	public String getDescricao() {
@@ -99,6 +102,14 @@ public class CardTrello {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Map<String, String> getDescricoes() {
+		return descricoes;
+	}
+
+	public void setDescricoes(Map<String, String> descricoes) {
+		this.descricoes = descricoes;
 	}
 
 }

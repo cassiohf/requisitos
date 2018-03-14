@@ -8,6 +8,7 @@ import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
+
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONArray;
@@ -30,6 +31,10 @@ public class ClienteTrello {
 			String lista_documentacao = "56cf6e8ef40ca6ca3bcbe26f";
 			//String lista_elicitacao = "56cf6e735694b3d802e8d8a0";
 			//String lista_cont_apf = "56cf6e9ae769951207321a17";
+			//String lista_impedimento = "573105b3fdf760380b56c518";
+			
+			//URL lists of board
+			//https://api.trello.com/1/boards/56cf6e5095d740ac09d83af1/lists?key=a2adfb6f5aeb7055d60384593bf0a276&token=7600ff7f3f0592dedc6b2bf362defa24f44e57d46f2ba965919bf9a2b91ba7a0
 			
 			//https://api.trello.com/1/lists/56cf6e8ef40ca6ca3bcbe26f/cards?key=a2adfb6f5aeb7055d60384593bf0a276&token=7600ff7f3f0592dedc6b2bf362defa24f44e57d46f2ba965919bf9a2b91ba7a0&cards=open&lists=open
 			String endereco = "https://api.trello.com/1/lists/"+lista_documentacao+"/cards"+autorizacao+criterio;
@@ -38,7 +43,7 @@ public class ClienteTrello {
 			Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("proxy.tjpb.jus.br",3128));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection(proxy);
 			conn.setRequestMethod("GET");
-			
+
 			conn.setRequestProperty("Accept", "application/json");
 			
 			if (conn.getResponseCode() != 200) {
@@ -76,10 +81,27 @@ public class ClienteTrello {
 				ct.setId(obj.getString("id"));
 				ct.setName(obj.getString("name"));
 				ct.setShortLink(obj.getString("shortUrl"));
-				ct.setDataEntrega(formatter.parseDateTime(obj.getString("due")));
+
+				if (!obj.isNull("due")) {
+					ct.setDataEntrega(formatter.parseDateTime(obj.getString("due")));
+				}
+				
 				ct.setCardDataFinalizada(obj.getBoolean("dueComplete"));
 				ct.setDataUltimaAtividade(formatter.parseDateTime(obj.getString("dateLastActivity")));
 				ct.setDescricao(obj.getString("desc"));
+				
+				String[] descricoes = ct.getDescricao().split("@");
+				
+				int indice;
+				for (int j = 0; j < descricoes.length; j++) {
+					indice = descricoes[j].indexOf(" ");
+					if(indice > 0) {
+						ct.getDescricoes().put(descricoes[j].substring(0, indice).trim(), descricoes[j].substring(indice, descricoes[j].length()).trim());
+					}
+					
+				}
+				
+				
 				ct.setIdList(obj.getString("idList"));
 				
 				endAcoes = "https://api.trello.com/1/cards/"+ct.getId()+"/actions"+autorizacao+criterio;				
@@ -116,14 +138,14 @@ public class ClienteTrello {
 				
 				System.out.println(ct.toString());
 			}
+
+			conn.disconnect();
 			
-						
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -24,7 +24,7 @@ public class ClienteRedmine {
 			//consulta com mais de um tracker_id não está funcionando
 			//String endereco = "http://redmine.tjpb.jus.br/issues.json?project_id=12&version_id=1056&tracker_id=2,5";
 			//String endereco = "http://redmine.tjpb.jus.br/issues.json?project_id=128&fixed_version_id=1318&tracker_id=2&tracker_id=5";
-			String endereco = "http://redmine.tjpb.jus.br/issues.json?project_id=128&fixed_version_id=1318";
+			String endereco = "http://redmine.tjpb.jus.br/issues.json?project_id=12&fixed_version_id=1056";
 			URL url  = new URL(endereco);
 			
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
